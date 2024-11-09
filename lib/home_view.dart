@@ -2,16 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:mindblocks/timerapp.dart';
 
 class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+  HomeView({super.key});
 
-  var taskList = [
-    {
-      "taskName": "task 1",
-      "taskCategory": "coding",
-      "taskEstTime": 1800,
-      "taskTimer": 0
-    }
-  ];
+  String? newTaskTitle;
+  String? newTaskCategory;
+  String? newTaskEst;
+
+  // var taskList = [
+  //   {
+  //     "taskName": "task 1",
+  //     "taskCategory": "coding",
+  //     "taskEstTime": 1800,
+  //     "taskTimer": 0
+  //   }
+  // ];
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -47,10 +51,58 @@ class _HomeViewState extends State<HomeView> {
       // ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
-          print("fein");
+          showModalBottomSheet(
+              context: context,
+              builder: (context) => SingleChildScrollView(
+                child: Container(
+                  height: 600,
+                  width: 400,
+                  child: Column(
+                    children: [
+                      const Text("task"),
+                      TextField(
+                        autofocus: true,
+                        onChanged: (
+                            (value) {
+                              widget.newTaskTitle = value;
+                            }
+                        ),
+                      ),
+                      const Text("category"),
+                      TextField(
+                        autofocus: true,
+                        onChanged: (
+                            (value) {
+                              widget.newTaskCategory = value;
+                            }
+                        ),
+                      ),
+                      const Text("estimated time"),
+                      TextField(
+                        autofocus: true,
+                        onChanged: (
+                            (value) {
+                              widget.newTaskEst = value;
+                            }
+                        ),
+                      ),
+                      TextButton(
+                          onPressed: (){
+
+                            Navigator.pop(context);
+                          },
+                          child: const Icon(
+                            Icons.save
+                          )
+                      )
+                    ],
+                  ),
+                ),
+              )
+          );
         },
         backgroundColor: Colors.purple,
-        child: Icon(
+        child: const Icon(
           Icons.add,
           color: Colors.white,
         ),
@@ -71,16 +123,29 @@ class _HomeViewState extends State<HomeView> {
                       color: Colors.grey.withOpacity(0.3),
                       spreadRadius: 2,
                       blurRadius: 10,
-                      offset: Offset(0, 3), // changes position of shadow
+                      offset: const Offset(0, 3), // changes position of shadow
                     ),
                   ],
                 ),
                 width: double.infinity,
-                height: 200,
+                height: 130,
                 child: const Column(
                   children: [
-                    Text("Total Blocks"),
-                    Text("2h 30m / 3h 30m")
+                    SizedBox(height: 20,),
+                    Text(
+                      "Total Time Blocks",
+                      style: TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.w600
+                      ),
+                    ),
+                    Text(
+                      "2h 30m / 3h 30m",
+                      style: TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.w400
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -88,9 +153,9 @@ class _HomeViewState extends State<HomeView> {
             //const SizedBox(height: 5),
             SizedBox(
               width: double.infinity,
-              height: 500,
+              height: 645,
               child: ListView.builder(
-                itemCount: 20,
+                itemCount: 5,
                 scrollDirection: Axis.vertical,
                 itemBuilder: (context, index){
                   return AnimatedContainer(
@@ -115,7 +180,7 @@ class _HomeViewState extends State<HomeView> {
                             children: [
                               AnimatedContainer(
                                 duration: const Duration(milliseconds: 600),
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                   color: Colors.green,
                                   shape: BoxShape.circle,
                                 ),
@@ -129,7 +194,7 @@ class _HomeViewState extends State<HomeView> {
                           ),
                         ),
                         title: const Padding(
-                          padding: const EdgeInsets.only(bottom: 5, top: 3),
+                          padding: EdgeInsets.only(bottom: 5, top: 3),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
