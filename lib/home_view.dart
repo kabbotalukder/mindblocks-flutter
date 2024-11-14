@@ -125,11 +125,11 @@ class _HomeViewState extends State<HomeView> {
               ),
             ),
             tasks.isEmpty
-            ? Expanded(
-                child: Center(child: const Text("there are no tasks!",
+            ? const Expanded(
+                child: Center(child: Text("there are no tasks!",
                   style: TextStyle(
                     fontSize: 16,
-                    color: const Color(0xaa000000)
+                    color: Color(0xaa000000),
                   ),
                 )))
             : Expanded(
@@ -145,9 +145,9 @@ class _HomeViewState extends State<HomeView> {
                           taskStatus[index] == 0
                           ? Colors.white
                           : taskStatus[index] == 1
-                          ? Colors.deepPurpleAccent.withAlpha(100)
-                          : taskStatus[index] == 2
                           ? Colors.blue.withAlpha(100)
+                          : taskStatus[index] == 2
+                          ? Colors.orange.withAlpha(100)
                           : taskStatus[index] == 3
                           ? Colors.red.withAlpha(100)
                           : Colors.green.withAlpha(100),
@@ -159,6 +159,8 @@ class _HomeViewState extends State<HomeView> {
                         Navigator.push(context, MaterialPageRoute(
                                 builder: (value) => TimerApp(
                                   taskName: tasks[index],
+                                  taskCat: categories[index],
+                                  estTime: estTime[index],
                                   taskTimer: timerTime[index],
                                 ))).then((updatedTask) {
                                   if(updatedTask != null){
@@ -186,9 +188,9 @@ class _HomeViewState extends State<HomeView> {
                                 taskStatus[index] == 0
                                 ? Colors.grey
                                 : taskStatus[index] == 1
-                                ? Colors.deepPurpleAccent
-                                : taskStatus[index] == 2
                                 ? Colors.blue
+                                : taskStatus[index] == 2
+                                ? Colors.orange
                                 : taskStatus[index] == 3
                                 ? Colors.red
                                 : Colors.green,
@@ -210,26 +212,52 @@ class _HomeViewState extends State<HomeView> {
                                 ),
                               ),
                             ),
-                            (timerTime[index] != 0)
-                            ? Text("${timerTime[index] ~/ 3600}h ${timerTime[index] ~/ 60 % 60}m")
-                            : Text("N/A"),
+
+                            Text(
+                                (timerTime[index] != 0)
+                                ? "${timerTime[index] ~/ 3600}h ${timerTime[index] ~/ 60 % 60}m"
+                                : "N/A",
+                              style: TextStyle(
+                                fontSize: size.width * .030,
+                                color: const Color(0xff454545),
+                                fontWeight: FontWeight.w400,
+                              ),
+                              ),
                           ],
                         ),
                         title: Padding(
-                          padding: EdgeInsets.only(bottom: 5, top: 3),
+                          padding: EdgeInsets.only(left: 7, bottom: 5, top: 5),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
                                 children: [
-                                  Text(categories[index]),
-                                  SizedBox(width: 10,),
+                                  Text(categories[index],
+                                  style: TextStyle(
+                                    color: const Color(0xff454545),
+                                    fontSize: size.width * .035,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  ),
+                                  // SizedBox(width: 10,),
                                   (int.parse(estTime[index]) != 0)
-                                  ? Text("${int.parse(estTime[index]) ~/ 60}h ${int.parse(estTime[index]) % 60}m")
+                                  ? Text(" - ${int.parse(estTime[index]) ~/ 60}h ${int.parse(estTime[index]) % 60}m",
+                                    style: TextStyle(
+                                        color: const Color(0xff666666),
+                                        fontSize: size.width * .035,
+                                        fontWeight: FontWeight.w400
+                                    ),
+                                  )
                                   : SizedBox(),
                                 ],
                               ),
-                              Text(tasks[index])
+                              Text(tasks[index],
+                                style: TextStyle(
+                                    color: const Color(0xff000000),
+                                    fontSize: size.width * .045,
+                                    fontWeight: FontWeight.w500
+                                ),
+                              )
                             ],
                           ),
                         ),

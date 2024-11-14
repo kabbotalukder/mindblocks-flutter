@@ -31,7 +31,7 @@ class _InputFormState extends State<InputForm> {
 
     var size = MediaQuery.of(context).size;
     return Scaffold(
-
+      backgroundColor: const Color(0xfff1f1f1),
       appBar: AppBar(
         automaticallyImplyLeading: true,
         backgroundColor: Colors.transparent,
@@ -82,6 +82,7 @@ class _InputFormState extends State<InputForm> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 17, 0, 0),
                         child: DropdownMenu(
+                          menuHeight: size.width * 0.75,
                           width: 175,
                           label: const Text('Estimated Hours'),
                           initialSelection: estHours.first,
@@ -98,6 +99,7 @@ class _InputFormState extends State<InputForm> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(17, 17, 0, 0),
                         child: DropdownMenu(
+                          menuHeight: size.width * 0.75,
                           width: 175,
                           label: const Text('Estimated Minutes'),
                           initialSelection: estMinutes.first,
