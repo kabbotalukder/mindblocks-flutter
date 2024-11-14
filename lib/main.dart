@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mindblocks/MyStopwatchApp.dart';
 import 'package:mindblocks/home_view.dart';
 import 'package:mindblocks/homepage.dart';
+import 'package:mindblocks/input_form.dart';
 import 'package:mindblocks/timerapp.dart';
 
 void main() {

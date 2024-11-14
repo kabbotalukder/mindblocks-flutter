@@ -1,105 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:mindblocks/input_form.dart';
 import 'package:mindblocks/timerapp.dart';
 
 class HomeView extends StatefulWidget {
   HomeView({super.key});
 
-  String? newTaskTitle;
-  String? newTaskCategory;
-  String? newTaskEst;
 
-  // var taskList = [
-  //   {
-  //     "taskName": "task 1",
-  //     "taskCategory": "coding",
-  //     "taskEstTime": 1800,
-  //     "taskTimer": 0
-  //   }
-  // ];
 
   @override
   State<HomeView> createState() => _HomeViewState();
 }
 
 class _HomeViewState extends State<HomeView> {
+
+  List<String> tasks = [];
+  List<String> categories = [];
+  List<String> estTime = [];
+  List<String> timerTime = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      // floatingActionButton: GestureDetector(
-      //   onTap: (){
-      //     print("elevated button");
-      //   },
-      //   child: Material(
-      //     borderRadius: BorderRadius.circular(15),
-      //     elevation: 10,
-      //     child: Container(
-      //       width: 70,
-      //       height: 70,
-      //       decoration: BoxDecoration(
-      //         color: Colors.purple,
-      //         borderRadius: BorderRadius.circular(15)
-      //       ),
-      //       child: Center(
-      //         child: Icon(
-      //           Icons.add,
-      //           color: Colors.white,
-      //         ),
-      //       ),
-      //     ),
-      //   ),
-      // ),
       floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          showModalBottomSheet(
-              context: context,
-              builder: (context) => SingleChildScrollView(
-                child: Container(
-                  height: 600,
-                  width: 400,
-                  child: Column(
-                    children: [
-                      const Text("task"),
-                      TextField(
-                        autofocus: true,
-                        onChanged: (
-                            (value) {
-                              widget.newTaskTitle = value;
-                            }
-                        ),
-                      ),
-                      const Text("category"),
-                      TextField(
-                        autofocus: true,
-                        onChanged: (
-                            (value) {
-                              widget.newTaskCategory = value;
-                            }
-                        ),
-                      ),
-                      const Text("estimated time"),
-                      TextField(
-                        autofocus: true,
-                        onChanged: (
-                            (value) {
-                              widget.newTaskEst = value;
-                            }
-                        ),
-                      ),
-                      TextButton(
-                          onPressed: (){
-
-                            Navigator.pop(context);
-                          },
-                          child: const Icon(
-                            Icons.save
-                          )
-                      )
-                    ],
-                  ),
-                ),
-              )
-          );
+        onPressed: () async {
+            await Navigator.push(context, MaterialPageRoute(
+                builder: (value) => InputForm(),
+            ),
+          ).then((newTask) {
+            if(newTask != null){
+              setState(() {
+                tasks.add(newTask[0]);
+                categories.add(newTask[1]);
+                estTime.add(newTask[2]);
+                timerTime.add("00h 00m");
+              });
+            }
+            });
         },
         backgroundColor: Colors.purple,
         child: const Icon(
@@ -128,8 +65,8 @@ class _HomeViewState extends State<HomeView> {
                   ],
                 ),
                 width: double.infinity,
-                height: 130,
-                child: const Column(
+                height: 170,
+                child: Column(
                   children: [
                     SizedBox(height: 20,),
                     Text(
@@ -140,24 +77,32 @@ class _HomeViewState extends State<HomeView> {
                       ),
                     ),
                     Text(
-                      "2h 30m / 3h 30m",
+                      "00h 00m / 00h 00m",
                       style: TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.w400
                       ),
-                    )
+                    ),
+                    ElevatedButton(
+                        onPressed: (){
+                          for(int i = 0; i < tasks.length;i++){
+                            print(tasks[i]);
+                          }
+                        },
+                        child: Icon(Icons.refresh)
+                    ),
                   ],
                 ),
               ),
             ),
-            //const SizedBox(height: 5),
-            SizedBox(
-              width: double.infinity,
-              height: 645,
+            tasks.isEmpty
+            ? const Text("there are no tasks!")
+            : Expanded(
               child: ListView.builder(
-                itemCount: 5,
+                itemCount: tasks.length,
                 scrollDirection: Axis.vertical,
                 itemBuilder: (context, index){
+                  print("Building item at index: $index, tasks length: ${tasks.length}");
                   return AnimatedContainer(
                     margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     decoration: BoxDecoration(
@@ -168,8 +113,8 @@ class _HomeViewState extends State<HomeView> {
                     child: GestureDetector(
                       onTap: (){
                         Navigator.push(context, MaterialPageRoute(
-                                builder: (value) => const TimerApp(
-                                  taskName: "Task Prop",
+                                builder: (value) => TimerApp(
+                                  taskName: tasks[index],
                                   taskTimer: 20,
                                 )));
                         },
@@ -189,23 +134,23 @@ class _HomeViewState extends State<HomeView> {
                                   color: Colors.white,
                                 ),
                               ),
-                              Text("2h 30m")
+                              Text(timerTime[index])
                             ],
                           ),
                         ),
-                        title: const Padding(
+                        title: Padding(
                           padding: EdgeInsets.only(bottom: 5, top: 3),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
                                 children: [
-                                  Text("Category"),
+                                  Text(categories[index]),
                                   SizedBox(width: 10,),
-                                  Text("3h 30m"),
+                                  Text(estTime[index]),
                                 ],
                               ),
-                              Text("Task")
+                              Text(tasks[index])
                             ],
                           ),
                         ),
