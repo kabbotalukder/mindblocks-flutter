@@ -18,9 +18,12 @@ class _TimerState extends State<TimerApp> {
   late Stopwatch stopwatch;
   late Timer t;
 
+  var sec;
+
+  List<int> updatedTask = [];
+
   void handleStartStop()
   {
-    print(stopwatch.elapsed.inSeconds);
     if(stopwatch.isRunning) {
       stopwatch.stop();
     }
@@ -29,7 +32,7 @@ class _TimerState extends State<TimerApp> {
     }
   }
   String returnFormattedText() {
-    var sec = stopwatch.elapsed.inSeconds;
+    sec = stopwatch.elapsed.inSeconds + (widget.taskTimer);
 
     String seconds = (sec % 60).toString().padLeft(2, "0");
     String minutes = ((sec ~/ 60) % 60).toString().padLeft(2, "0");
@@ -53,7 +56,7 @@ class _TimerState extends State<TimerApp> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "${widget.taskName}",
+          "${widget.taskName} | ${widget.taskTimer}",
           style: TextStyle(
             fontWeight: FontWeight.w500
           ),
@@ -92,19 +95,98 @@ class _TimerState extends State<TimerApp> {
                   ),
                 ),
                 const SizedBox(height: 15,),
-                CupertinoButton(
-                  onPressed: () {
-                    stopwatch.reset();
-                  },
-                  padding: EdgeInsets.all(0),
-                  child: const Text(
-                    "Reset",
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontWeight: FontWeight.bold,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(2.5),
+                      child: ElevatedButton(onPressed: () {
+                        updatedTask.add(sec);
+                        updatedTask.add(1);
+                        Navigator.pop(context, updatedTask);
+                      },
+                          child: Icon(
+                            Icons.hourglass_empty,
+                            color: Colors.white,
+                          ),
+                        style: ButtonStyle(
+                          backgroundColor: WidgetStatePropertyAll<Color>(Colors.deepPurpleAccent),
+                        ),
+                      ),
                     ),
-                  ),
+                    Padding(
+                      padding: const EdgeInsets.all(2.5),
+                      child: ElevatedButton(onPressed: () {
+                        updatedTask.add(sec);
+                        updatedTask.add(2);
+                        Navigator.pop(context, updatedTask);
+                      },
+                        child: Icon(
+                          Icons.calendar_month,
+                          color: Colors.white,
+                        ),
+                        style: ButtonStyle(
+                          backgroundColor: WidgetStatePropertyAll<Color>(Colors.blue),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(2.5),
+                      child: ElevatedButton(onPressed: () {
+                        updatedTask.add(0);
+                        updatedTask.add(0);
+                        Navigator.pop(context, updatedTask);
+                      },
+                        child: Icon(
+                          Icons.restart_alt,
+                          color: Colors.white,
+                        ),
+                        style: ButtonStyle(
+                          backgroundColor: WidgetStatePropertyAll<Color>(Colors.grey),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(2.5),
+                      child: ElevatedButton(onPressed: () {
+                        updatedTask.add(sec);
+                        updatedTask.add(3);
+                        Navigator.pop(context, updatedTask);
+                      },
+                        child: Icon(
+                          Icons.close,
+                          color: Colors.white,
+                        ),
+                        style: ButtonStyle(
+                          backgroundColor: WidgetStatePropertyAll<Color>(Colors.red),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(2.5),
+                      child: ElevatedButton(onPressed: () {
+                        updatedTask.add(sec);
+                        updatedTask.add(4);
+                        Navigator.pop(context, updatedTask);
+                      },
+                        child: Icon(
+                          Icons.check,
+                          color: Colors.white,
+                        ),
+                        style: ButtonStyle(
+                          backgroundColor: WidgetStatePropertyAll<Color>(Colors.green),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
+                // CupertinoButton(
+                //   onPressed: () {
+                //     stopwatch.reset();
+                //   },
+                //   padding: EdgeInsets.all(0),
+                //   child: const Icon(Icons.refresh)
+                // ),
               ],
             ),
           )

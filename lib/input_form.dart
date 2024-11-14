@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:mindblocks/home_view.dart';
 
 class InputForm extends StatefulWidget {
@@ -13,16 +14,21 @@ class _InputFormState extends State<InputForm> {
 
   final _formKey = GlobalKey<FormState>();
   final TextEditingController taskTextEditingController = TextEditingController();
-  final TextEditingController estTimeTextEditingController = TextEditingController();
 
 
   List<String> availCategories = ["Work", "Study", "Programming"];
+  List<String> estHours = ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+  List<String> estMinutes = ["00", "05", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55"];
   List<String> newTask = [];
+  String selectedCategory = "";
+  var selectedEstTime = 0;
+  var selectedHour = 0;
+  var selectedMinutes = 0;
 
 
   @override
   Widget build(BuildContext context) {
-    String selectedCategory = availCategories.first;
+
     var size = MediaQuery.of(context).size;
     return Scaffold(
 
@@ -56,23 +62,12 @@ class _InputFormState extends State<InputForm> {
                       return "Invalid Task!";
                     },
                   ),
-                  TextFormField(
-                    controller: estTimeTextEditingController,
-                    decoration: const InputDecoration(
-                        labelText: "Estimated Time"
-                    ),
-                    validator: (value) {
-                      if(value != null && value.isNotEmpty){
-                        return null;
-                      }
-                      return "Invalid Estimated Time!";
-                    },
-                  ),
                   SizedBox(height: 17,),
                   DropdownMenu(
                     width: 380,
                     label: const Text('Category'),
-                    initialSelection: availCategories.first,
+                    hintText: "Category",
+                    // initialSelection: availCategories.first,
                     dropdownMenuEntries: availCategories.map<DropdownMenuEntry<String>>((String value) {
                       return DropdownMenuEntry<String>(value: value, label: value);
                     }).toList(),
@@ -82,28 +77,67 @@ class _InputFormState extends State<InputForm> {
                       });
                     },
                   ),
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 17, 0, 0),
+                        child: DropdownMenu(
+                          width: 175,
+                          label: const Text('Estimated Hours'),
+                          initialSelection: estHours.first,
+                          dropdownMenuEntries: estHours.map<DropdownMenuEntry<String>>((String value) {
+                            return DropdownMenuEntry<String>(value: value, label: value);
+                          }).toList(),
+                          onSelected: (String? value) {
+                            setState(() {
+                              selectedHour = int.parse(value!) * 60;
+                            });
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(17, 17, 0, 0),
+                        child: DropdownMenu(
+                          width: 175,
+                          label: const Text('Estimated Minutes'),
+                          initialSelection: estMinutes.first,
+                          dropdownMenuEntries: estMinutes.map<DropdownMenuEntry<String>>((String value) {
+                            return DropdownMenuEntry<String>(value: value, label: value);
+                          }).toList(),
+                          onSelected: (String? value) {
+                            setState(() {
+                              selectedMinutes = int.parse(value!);
+                            });
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
           ),
-          ElevatedButton(
-            style: const ButtonStyle(
-              backgroundColor: WidgetStatePropertyAll<Color>(Colors.green)
-            ),
-            onPressed: (){
-              if(_formKey.currentState!.validate()){
-                setState(() {
-                  newTask.add(taskTextEditingController.text);
-                  newTask.add(estTimeTextEditingController.text);
-                  newTask.add(selectedCategory);
-                });
-                taskTextEditingController.clear();
-                estTimeTextEditingController.clear();
-                Navigator.pop(context, newTask);
-              }
-            },
-            child: const Icon(Icons.done,
-              color: Colors.white,
+          SizedBox(
+            width: size.width * .90,
+            child: ElevatedButton(
+              style: const ButtonStyle(
+                backgroundColor: WidgetStatePropertyAll<Color>(Color(0xff8D33FF))
+              ),
+              onPressed: (){
+                selectedEstTime = selectedHour + selectedMinutes;
+                if(_formKey.currentState!.validate()){
+                  setState(() {
+                    newTask.add(taskTextEditingController.text);
+                    newTask.add(selectedCategory);
+                    newTask.add(selectedEstTime.toString());
+                  });
+                  taskTextEditingController.clear();
+                  Navigator.pop(context, newTask);
+                }
+              },
+              child: const Icon(Icons.done,
+                color: Colors.white,
+              ),
             ),
           ),
           Expanded(
